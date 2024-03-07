@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Kick_Off'
+    'Kick_Off',
+    'django_bootstrap_icons',
 ]
 
 MIDDLEWARE = [
@@ -118,7 +119,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    'D:/Works/Django/Event_Management_System/Kick_Off_Django/Kick_Off/static',
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'Kick_Off.CustomUser'

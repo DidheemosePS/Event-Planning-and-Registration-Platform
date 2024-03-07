@@ -1,0 +1,28 @@
+.signup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.signup p {
+  align-self: center;
+}
+
+.signup form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.signup form input {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid grey;
+  border-radius: 0.3rem;
+}
+
+.signup form input {
+  outline: none;
+  border: 1px solid rgb(223, 62, 62);
+}

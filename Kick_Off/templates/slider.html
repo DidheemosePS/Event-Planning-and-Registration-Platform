@@ -1,0 +1,27 @@
+{% load bootstrap_icons %}
+<div id="slider" class="slider">
+  {% if not request.user.is_authenticated %}
+  <a href="{% url 'login' %}" class="slider_buttons">
+    {% bs_icon 'door-open' %}
+    <p>Login / Register</p>
+    {% bs_icon 'arrow-right-short' %}
+  </a>
+  {% endif %}
+  <a href="{% url '' %}" class="slider_buttons">
+    {% bs_icon 'cart-check' %}
+    <p>Saved Events</p>
+    {% bs_icon 'arrow-right-short' %}
+  </a>
+  <a href="{% url '' %}" class="slider_buttons">
+    {% bs_icon 'ticket-perforated' %}
+    <p>Tickets Booked</p>
+    {% bs_icon 'arrow-right-short' %}
+  </a>
+  {% if request.user.is_authenticated %}
+  <a href="{% url 'logout' %}" class="slider_buttons">
+    {% bs_icon 'door-closed' %}
+    <p>Logout</p>
+    {% bs_icon 'arrow-right-short' %}
+  </a>
+  {% endif %}
+</div>

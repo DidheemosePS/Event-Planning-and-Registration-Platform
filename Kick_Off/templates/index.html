@@ -1,1 +1,44 @@
-<p>Hi Didheemose</p>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kick Off{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/nav_bar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/slider.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/search_bar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/book_now.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
+  </head>
+  <body>
+    {% include 'nav_bar.html' %} {% include 'slider.html' %} {% block main %}
+    <main id="main" class="main">
+      <div class="carousel">
+        <img src="{% static 'images/DJ.jpg' %}" />
+        <img src="{% static 'images/poster.jpg' %}" />
+      </div>
+      {% include 'search_bar.html'%}
+      <div class="cards-list">
+        {% if search_result %} {% for i in "1" %}
+        <a class="card" href="{% url 'book_now' id='1' %}">
+          <img src="{% static 'images/poster.jpg' %}" class="poster" />
+          <p class="date_time">{{ search_result }}</p>
+          <p class="org_name">Asha</p>
+          <p class="location">Experimental Theatre</p>
+        </a>
+        {% endfor %} {% else %} {% for i in "12" %}
+        <a class="card" href="{% url 'book_now' id='1' %}">
+          <img src="{% static 'images/poster.jpg' %}" class="poster" />
+          <p class="date_time">Sat, 9 Mar</p>
+          <p class="org_name">Asha</p>
+          <p class="location">Experimental Theatre</p>
+        </a>
+        {% endfor %} {% endif %}
+      </div>
+    </main>
+    {% endblock %}
+    <script src="{% static 'js/index.js' %}"></script>
+  </body>
+</html>
