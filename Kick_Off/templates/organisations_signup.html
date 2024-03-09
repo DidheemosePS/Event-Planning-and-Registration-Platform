@@ -1,0 +1,39 @@
+<!-- {% extends 'index.html' %} {% load static %} {% load bootstrap_icons %} -->
+<!-- prettier-ignore -->
+{% block title %} - SignUp {% endblock %} {% block main %}
+<main class="signup">
+  <p>SignUp</p>
+  <form method="POST" autocomplete="off">
+    {% csrf_token %}
+    <label for="id_username" class="signup_label">Username</label>
+    {{signup_form.username}}
+    <p class="signup_helptext">
+      Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
+    </p>
+    <label for="id_email" class="signup_label">Email</label>
+    {{signup_form.email}}
+    <label for="id_password1" class="signup_label">Password</label>
+    {{signup_form.password1}}
+    <ul class="signup_helptext">
+      <li>
+        Your password can’t be too similar to your other personal information.
+      </li>
+      <li>Your password must contain at least 8 characters.</li>
+      <li>
+        Your password can’t be a commonly used password. Your password can’t be
+        entirely numeric.
+      </li>
+    </ul>
+    <label for="id_password2" class="signup_label">Confirm Password</label>
+    {{signup_form.password2}}
+    <p class="signup_helptext">
+      Enter the same password as before, for verification.
+    </p>
+    {% if signup_form.error_messages %} 
+    {% for error in signup_form.error_messages %}
+    <p class="signup_error_message">{{ error }}</p>
+    {% endfor%} {% endif %}
+    <input type="submit" value="SignUp" class="signup_button" />
+  </form>
+</main>
+{% endblock %}

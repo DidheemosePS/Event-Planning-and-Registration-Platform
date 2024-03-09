@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="{% static 'css/search_bar.css' %}" />
     <link rel="stylesheet" href="{% static 'css/book_now.css' %}" />
     <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
   </head>
   <body>
     {% include 'nav_bar.html' %} {% include 'slider.html' %} {% block main %}
     <main id="main" class="main">
       <div class="carousel">
-        <img src="{% static 'images/DJ.jpg' %}" />
+        <img src="{% static 'images/dj.jpg' %}" />
         <img src="{% static 'images/poster.jpg' %}" />
       </div>
       {% include 'search_bar.html'%}

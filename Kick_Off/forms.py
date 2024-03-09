@@ -9,7 +9,7 @@ from django.forms.widgets import PasswordInput, TextInput
 class SignupForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2']
 
 # Login form
 

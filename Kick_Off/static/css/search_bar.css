@@ -7,14 +7,13 @@
 
 .search_bar input {
   width: 100%;
-  padding: 0.4rem 0.5rem;
+  padding: 0.3rem 0.5rem;
   border: 1px solid grey;
   border-radius: 0.3rem;
 }
 
 .search_bar input:focus {
   outline: none;
-  border: 1px solid rgb(223, 62, 62);
 }
 
 .search_bar button {

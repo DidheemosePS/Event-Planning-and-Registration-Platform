@@ -1,0 +1,19 @@
+<!-- {% extends 'index.html' %} {% load bootstrap_icons %} -->
+<!-- prettier-ignore -->
+<!-- {% block title %} - Login {% endblock %} {% block main %} -->
+<main class="login">
+  <p>Login</p>
+  <form method="POST" autocomplete="off">
+    {% csrf_token %}
+    <label for="id_username" class="login_label">Username</label>
+    {{ login_form.username }}
+    <label for="id_password" class="login_label">Password</label>
+    {{ login_form.password }} {% if login_form.error_messages %} 
+    {% for error in login_form.error_messages %}
+    <p class="login_error_message">{{ error }}</p>
+    {% endfor%} {% endif %}
+    <input type="submit" value="Login" class="login_button" />
+  </form>
+  <a href="{% url 'participants_signup' %}" class="create_account">Create a account</a>
+</main>
+{% endblock %}

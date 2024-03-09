@@ -19,7 +19,7 @@
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
   text-decoration: none;
   color: black;
-  font-size: smaller;
+  font-size: small;
 }
 
 .slider .slider_buttons svg:last-child {
