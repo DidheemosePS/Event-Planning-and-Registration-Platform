@@ -1,4 +1,5 @@
-from .models import Event
+from django.http import HttpResponse
+from .models import Event, Cart
 from django.shortcuts import render, redirect
 from django.shortcuts import redirect, render
 from . forms import SignupForm, LoginForm, CreateEventsForm
@@ -20,12 +21,14 @@ def search(request):
 @login_required(login_url="login")
 def book_now(request, id):
     event_details = Event.objects.filter(id=id)[0]
-    return render(request, 'book_now.html', {'event_details': event_details})
+    book_mark = Cart.objects.filter(
+        participant=request.user, event=Event.objects.get(pk=id))
+    if not book_mark:
+        return render(request, 'book_now.html', {'event_details': event_details})
+    return render(request, 'book_now.html', {'event_details': event_details, 'book_mark': True})
 
 
 def signup(request):
-    if request.user.is_authenticated:
-        return redirect('')
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
@@ -41,8 +44,6 @@ def signup(request):
 
 
 def login(request):
-    if request.user.is_authenticated:
-        return redirect('')
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
@@ -63,7 +64,7 @@ def logout(request):
 
 @login_required(login_url="login")
 def create_events(request):
-    if not request.user.is_authenticated and not request.user.is_organization:
+    if not request.user.is_organisation:
         return redirect('login')
     if request.method == 'POST':
         form = CreateEventsForm(request.POST)
@@ -86,6 +87,32 @@ def create_events(request):
 
 @login_required(login_url="login")
 def view_scheduled_events(request):
-    if not request.user.is_authenticated and not request.user.is_organization:
+    if not request.user.is_organisation:
         return redirect('login')
-    return render(request, 'view_scheduled_events.html')
+    view_scheduled_events = Event.objects.filter(organisation=request.user)
+    return render(request, 'index.html', {'events': view_scheduled_events})
+
+
+@login_required(login_url="login")
+def save_this_event(request, id):
+    if not request.user.is_participant:
+        return redirect('login')
+    # event = Event.objects.get(pk=id) to create Event model instance
+    if not Cart.objects.filter(participant=request.user, event=Event.objects.get(pk=id)):
+        Cart.objects.create(
+            participant=request.user, event=Event.objects.get(pk=id))
+    else:
+        Cart.objects.filter(
+            participant=request.user, event=Event.objects.get(pk=id)).delete()
+    return HttpResponse('Ok')
+
+
+@login_required(login_url="login")
+def saved_events(request):
+    if not request.user.is_participant:
+        return redirect('login')
+    fetch_saved_events = Cart.objects.filter(participant=request.user)
+    if not fetch_saved_events:
+        return HttpResponse('No saved events')
+    # [fetch_saved_events[0].event] convert to array
+    return render(request, 'index.html', {'events': [fetch_saved_events[0].event]})

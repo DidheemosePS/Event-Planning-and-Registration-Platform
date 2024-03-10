@@ -19,3 +19,10 @@ class Event(models.Model):
     event_location_link = models.URLField(max_length=200)
     organisation = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='events_created')
+
+
+class Cart(models.Model):
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="event")
+    participant = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="cart")
