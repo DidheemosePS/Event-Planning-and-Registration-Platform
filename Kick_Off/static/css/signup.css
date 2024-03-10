@@ -16,7 +16,7 @@
   gap: 0.5rem;
 }
 
-.signup form .signup_label {
+.signup form label {
   font-size: smaller;
   font-weight: 600;
 }
@@ -26,13 +26,20 @@
   padding: 0.3rem 0.5rem;
   border: 1px solid grey;
   border-radius: 0.3rem;
-}
-
-.signup form > input {
   outline: none;
 }
 
-.signup form .signup_helptext {
+.signup form #id_account_type {
+  display: flex;
+  gap: 1rem;
+}
+
+.signup form #id_account_type div label {
+  font-size: small;
+  font-weight: normal;
+}
+
+.signup form .helptext {
   font-size: small;
 }
 

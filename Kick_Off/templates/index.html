@@ -7,14 +7,18 @@
     <title>Kick Off{% block title %} {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/nav_bar.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/slider.css' %}" />
     <link rel="stylesheet" href="{% static 'css/search_bar.css' %}" />
     <link rel="stylesheet" href="{% static 'css/book_now.css' %}" />
     <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
     <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/create_events.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/view_scheduled_events.css' %}"
+    />
   </head>
   <body>
-    {% include 'nav_bar.html' %} {% include 'slider.html' %} {% block main %}
+    {% include 'nav_bar.html' %} {% block main %}
     <main id="main" class="main">
       <div class="carousel">
         <img src="{% static 'images/dj.jpg' %}" />
@@ -22,24 +26,29 @@
       </div>
       {% include 'search_bar.html'%}
       <div class="cards-list">
-        {% if search_result %} {% for i in "1" %}
+        <!-- Search Results -->
+
+        {% if search_result %} {% for i in "12456789" %}
         <a class="card" href="{% url 'book_now' id='1' %}">
           <img src="{% static 'images/poster.jpg' %}" class="poster" />
           <p class="date_time">{{ search_result }}</p>
           <p class="org_name">Asha</p>
           <p class="location">Experimental Theatre</p>
         </a>
-        {% endfor %} {% else %} {% for i in "12" %}
-        <a class="card" href="{% url 'book_now' id='1' %}">
+        {% endfor %} {% else %} {% for event in events %}
+
+        <!-- Events Showing -->
+
+        <a class="card" href="{% url 'book_now' id=event.id %}">
           <img src="{% static 'images/poster.jpg' %}" class="poster" />
-          <p class="date_time">Sat, 9 Mar</p>
-          <p class="org_name">Asha</p>
-          <p class="location">Experimental Theatre</p>
+          <p class="date_time">{{ event.event_date }}</p>
+          <p class="org_name">{{ event.event_name }}</p>
+          <p class="location">{{ event.event_venue_name }}</p>
         </a>
         {% endfor %} {% endif %}
       </div>
     </main>
     {% endblock %}
-    <script src="{% static 'js/index.js' %}"></script>
   </body>
+  <script src="{% static 'js/index.js' async %}"></script>
 </html>

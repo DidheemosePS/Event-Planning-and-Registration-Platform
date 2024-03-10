@@ -28,7 +28,8 @@
   margin-left: auto;
 }
 
-.book_now_main .description {
+.book_now_main .description,
+.tickets_count {
   font-size: small;
 }
 

@@ -1,27 +1,27 @@
-.login {
+.create_events {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
 }
 
-.login p:first-child {
+.create_events p:first-child {
   align-self: center;
   font-weight: bold;
 }
 
-.login form {
+.create_events form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.login form label {
+.create_events form label {
   font-size: smaller;
   font-weight: 600;
 }
 
-.login form > input {
+.create_events form > input {
   width: 100%;
   padding: 0.3rem 0.5rem;
   border: 1px solid grey;
@@ -29,12 +29,17 @@
   outline: none;
 }
 
-.login .login_error_message {
-  color: rgb(223, 62, 62);
-  font-size: small;
+.create_events form #id_event_description {
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid grey;
+  border-radius: 0.3rem;
+  outline: none;
+  resize: vertical;
+  font-size: smaller;
 }
 
-.login .login_button {
+.create_events .create_events_button {
   width: 100%;
   height: 2rem;
   border: none;
@@ -45,10 +50,6 @@
   background-color: rgb(223, 62, 62);
 }
 
-.login .login_button:hover {
+.create_events .create_events_button:hover {
   cursor: pointer;
-}
-.login .create_account {
-  align-self: center;
-  font-size: small;
 }

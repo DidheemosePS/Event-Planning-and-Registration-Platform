@@ -1,0 +1,15 @@
+{% extends 'index.html' %} {% load static %} 
+{% block title %} - SignUp {% endblock %} {% block main %}
+<main class="signup">
+  <p>SignUp</p>
+  <form method="POST" autocomplete="off">
+    {% csrf_token %}
+    {{ signup_form }}
+    {% if signup_form.error_messages %} 
+    {% for error in signup_form.error_messages %}
+    <p class="signup_error_message">{{ error }}</p>
+    {% endfor%} {% endif %}
+    <input type="submit" value="SignUp" class="signup_button" />
+  </form>
+</main>
+{% endblock %}

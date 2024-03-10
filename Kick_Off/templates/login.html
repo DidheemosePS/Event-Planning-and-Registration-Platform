@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+{% block title %} - Login {% endblock %} {% block main %}
+<main class="login">
+  <p>Login</p>
+  <form method="POST" autocomplete="off">
+    {% csrf_token %}
+    {{ login_form }}
+    {% if login_form.error_messages %} 
+    {% for error in login_form.error_messages %}
+    <p class="login_error_message">{{ error }}</p>
+    {% endfor%} {% endif %}
+    <input type="submit" value="Login" class="login_button" />
+  </form>
+  <a href="{% url 'signup' %}" class="create_account"
+    >Create a account</a
+  >
+</main>
+{% endblock %}
