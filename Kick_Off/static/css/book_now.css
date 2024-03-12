@@ -30,6 +30,10 @@
   margin-left: auto;
 }
 
+.book_now_main .bookmark_check:hover {
+  cursor: pointer;
+}
+
 .book_now_main .description,
 .tickets_count {
   font-size: small;
