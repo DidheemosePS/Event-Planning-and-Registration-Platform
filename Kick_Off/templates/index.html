@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kick Off{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/nav_bar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/search_bar.css' %}" />
     <link rel="stylesheet" href="{% static 'css/book_now.css' %}" />
     <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
@@ -26,27 +26,15 @@
       </div>
       {% include 'search_bar.html'%}
       <div class="cards-list">
-        
-        <!-- Search Results -->
-
-        {% if search_result %} {% for i in "12456789" %}
-        <a class="card" href="{% url 'book_now' id='1' %}">
-          <img src="{% static 'images/poster.jpg' %}" class="poster" />
-          <p class="date_time">{{ search_result }}</p>
-          <p class="org_name">Asha</p>
-          <p class="location">Experimental Theatre</p>
-        </a>
-        {% endfor %} {% else %} {% for event in events %}
-
-        <!-- Events Showing -->
-
+        {% for event in events %}
+        <!-- To Show Events -->
         <a class="card" href="{% url 'book_now' id=event.id %}">
           <img src="{% static 'images/poster.jpg' %}" class="poster" />
           <p class="date_time">{{ event.event_date }}</p>
           <p class="org_name">{{ event.event_name }}</p>
           <p class="location">{{ event.event_venue_name }}</p>
         </a>
-        {% endfor %} {% endif %}
+        {% endfor %}
       </div>
     </main>
     {% endblock %}

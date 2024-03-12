@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+import json
+from django.http import HttpResponse, JsonResponse
 from .models import Event, Cart
 from django.shortcuts import render, redirect
 from django.shortcuts import redirect, render
@@ -6,6 +7,7 @@ from . forms import SignupForm, LoginForm, CreateEventsForm
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 def index(request):
@@ -14,8 +16,11 @@ def index(request):
 
 
 def search(request):
-    search_result = request.GET.get('search_query')
-    return render(request, 'index.html', {'search_result': search_result})
+    search_value = request.GET.get('search_query')
+    # Q is used to perform OR logical operation
+    search_result = Event.objects.filter(Q(event_name=search_value) | Q(
+        event_venue_name=search_value))
+    return render(request, 'index.html', {'events': search_result})
 
 
 @login_required(login_url="login")
@@ -93,18 +98,22 @@ def view_scheduled_events(request):
     return render(request, 'index.html', {'events': view_scheduled_events})
 
 
-@login_required(login_url="login")
-def save_this_event(request, id):
+def save_this_event(request):
     if not request.user.is_participant:
-        return redirect('login')
-    # event = Event.objects.get(pk=id) to create Event model instance
-    if not Cart.objects.filter(participant=request.user, event=Event.objects.get(pk=id)):
-        Cart.objects.create(
-            participant=request.user, event=Event.objects.get(pk=id))
-    else:
-        Cart.objects.filter(
-            participant=request.user, event=Event.objects.get(pk=id)).delete()
-    return HttpResponse('Ok')
+        return JsonResponse({'login_required': True})
+    if request.method == 'POST':
+        # json.loads(request.POST) used to get the data from the POST request, request.POST can be used only in the form submissions
+        id = json.loads(request.body)['id']
+        # event = Event.objects.get(pk=id) to create Event model instance
+        if not Cart.objects.filter(participant=request.user, event=Event.objects.get(pk=id)):
+            Cart.objects.create(
+                participant=request.user, event=Event.objects.get(pk=id))
+            return JsonResponse({'bookmarked': True})
+        else:
+            Cart.objects.filter(
+                participant=request.user, event=Event.objects.get(pk=id)).delete()
+            return JsonResponse({'bookmarked': False})
+    return JsonResponse({'status': 'Invalid request'})
 
 
 @login_required(login_url="login")

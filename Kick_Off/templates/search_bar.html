@@ -1,4 +1,9 @@
-<form class="search_bar" method="GET" action="search" autocomplete="off">
+<form
+  class="search_bar"
+  method="GET"
+  action="{% url 'search' %}"
+  autocomplete="off"
+>
   <input type="text" placeholder="Search..." name="search_query" required />
   <button type="submit">
     <svg

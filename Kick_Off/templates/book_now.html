@@ -6,12 +6,16 @@
     <p class="date_time">
       {{ event_details.event_date }} - {{ event_details.event_time }}
     </p>
-    <a
-      href="{% url 'save_this_event' id=event_details.id %}"
-      class="bookmark_check"
-    >
 
-    <!-- if condition to check whether the user is bookmark or not -->
+    <!-- Show the bookmark only to the participants -->
+
+    {% if request.user.is_participant %}
+    <button
+      id="bookmark_icon"
+      class="bookmark_check"
+      onclick="bookmark_request({'id': '{{ event_details.id }}' })"
+    >
+      <!-- if condition to check whether the user is bookmark or not -->
 
       {% if book_mark %}
       <svg
@@ -44,7 +48,8 @@
         />
       </svg>
       {% endif %}
-    </a>
+    </button>
+    {% endif %}
   </div>
   <p class="description">{{ event_details.event_description }}</p>
   <p class="tickets_count">
@@ -79,6 +84,11 @@
     />
     Your browser does not support the video tag.
   </video>
+
+  <!-- Show the booknow only to the participants -->
+
+  {% if request.user.is_participant %}
   <button class="tickets">Book tickets</button>
+  {% endif %}
 </main>
 {% endblock %}

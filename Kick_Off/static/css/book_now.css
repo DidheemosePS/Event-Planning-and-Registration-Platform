@@ -24,6 +24,8 @@
 }
 
 .book_now_main .bookmark_check {
+  border: none;
+  background-color: transparent;
   color: rgb(223, 62, 62);
   margin-left: auto;
 }
