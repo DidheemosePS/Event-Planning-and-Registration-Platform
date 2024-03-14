@@ -88,7 +88,24 @@
   <!-- Show the booknow only to the participants -->
 
   {% if request.user.is_participant %}
-  <button class="tickets">Book tickets</button>
+  <a href="{% url 'book_tickets' id=event_details.id %}" class="book_tickets">
+    <p>Book tickets</p>
+  </a>
+  {% endif %}
+
+  <!-- The Edit, Delete button will be shown when the uploaded organisation is logged in by checking request.user.is_organisation and request.user.id == organisation_id -->
+
+  {% if request.user.is_organisation and request.user.id == organisation_id %}
+  <div class="edit_delete_book_tickets">
+    <a href="{% url 'view_scheduled_event_details_edit' id=event_details.id %}">
+      <p>Edit this event</p>
+    </a>
+    <a
+      href="{% url 'view_scheduled_event_details_delete' id=event_details.id %}"
+    >
+      <p>Delete this event</p>
+    </a>
+  </div>
   {% endif %}
 </main>
 {% endblock %}

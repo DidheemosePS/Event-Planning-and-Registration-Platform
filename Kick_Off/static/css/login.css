@@ -5,6 +5,12 @@
   padding: 1rem;
 }
 
+.login ul {
+  padding-inline: 1rem;
+  font-size: small;
+  color: rgb(223, 62, 62);
+}
+
 .login p:first-child {
   align-self: center;
   font-weight: bold;
@@ -51,4 +57,5 @@
 .login .create_account {
   align-self: center;
   font-size: small;
+  text-decoration: none;
 }

@@ -12,14 +12,14 @@ from django.db.models import Q
 
 def index(request):
     events = Event.objects.all()
-    return render(request, 'index.html', {'events': events})
+    return render(request, 'index.html', {'page_url': "book_now", 'events': events})
 
 
 def search(request):
     search_value = request.GET.get('search_query')
     # Q is used to perform OR logical operation
     search_result = Event.objects.filter(Q(event_name=search_value) | Q(
-        event_venue_name=search_value))
+        event_venue_name=search_value) | Q(organisation_name=search_value))
     return render(request, 'index.html', {'events': search_result})
 
 
@@ -44,6 +44,7 @@ def signup(request):
                 user.is_organisation = True
             user.save()
             return redirect('login')
+        return render(request, 'signup.html', {'signup_form': form})
     form = SignupForm()
     return render(request, 'signup.html', {'signup_form': form})
 
@@ -58,6 +59,7 @@ def login(request):
                 auth.login(request, user)
                 next_url = request.GET.get('next', '')
                 return redirect(next_url)
+        return render(request, 'login.html', {'login_form': form})
     form = LoginForm()
     return render(request, 'login.html', {'login_form': form})
 
@@ -74,20 +76,12 @@ def create_events(request):
     if request.method == 'POST':
         form = CreateEventsForm(request.POST)
         if form.is_valid():
-            new_event = Event(
-                event_name=form.cleaned_data['event_name'],
-                event_venue_name=form.cleaned_data['event_venue_name'],
-                event_description=form.cleaned_data['event_description'],
-                event_date=form.cleaned_data['event_date'],
-                event_time=form.cleaned_data['event_time'],
-                event_number_of_tickets=form.cleaned_data['event_number_of_tickets'],
-                event_location_link=form.cleaned_data['event_location_link'],
-                organisation=request.user
-            )
-            new_event.save()
+            create_event = form.save(commit=False)
+            create_event.organisation = request.user
+            create_event.save()
             return redirect('view_scheduled_events')
     form = CreateEventsForm()
-    return render(request, 'create_events.html', {'create_events_form': form})
+    return render(request, 'create_events.html', {'create_events_form': form, 'submit_button_value': "Create"})
 
 
 @login_required(login_url="login")
@@ -95,7 +89,16 @@ def view_scheduled_events(request):
     if not request.user.is_organisation:
         return redirect('login')
     view_scheduled_events = Event.objects.filter(organisation=request.user)
-    return render(request, 'index.html', {'events': view_scheduled_events})
+    return render(request, 'index.html', {'page_url': "view_scheduled_event_details", 'events': view_scheduled_events})
+
+
+@login_required(login_url="login")
+def view_scheduled_event_details(request, id):
+    if not request.user.is_organisation:
+        return redirect('login')
+    view_scheduled_event_details = Event.objects.filter(
+        organisation=request.user, id=id)[0]
+    return render(request, 'book_now.html', {'organisation_id': request.user.id, 'event_details': view_scheduled_event_details})
 
 
 def save_this_event(request):
@@ -124,4 +127,36 @@ def saved_events(request):
     if not fetch_saved_events:
         return HttpResponse('No saved events')
     # [fetch_saved_events[0].event] convert to array
-    return render(request, 'index.html', {'events': [fetch_saved_events[0].event]})
+    return render(request, 'index.html', {'page_url': "book_now", 'events': [fetch_saved_events[0].event]})
+
+
+@login_required(login_url="login")
+def book_tickets(request, id):
+    if not request.user.is_participant:
+        return redirect('login')
+    ticket_count = Event.objects.filter(id=id)[0]
+    if ticket_count.event_number_of_tickets == 0:
+        return HttpResponse("No tickets left")
+    return render(request, 'book_tickets.html')
+
+
+@login_required(login_url="login")
+def view_scheduled_event_details_delete(request, id):
+    if not request.user.is_organisation:
+        return redirect('login')
+    Event.objects.filter(organisation=request.user, id=id).delete()
+    return redirect('view_scheduled_events')
+
+
+@login_required(login_url="login")
+def view_scheduled_event_details_edit(request, id):
+    if not request.user.is_organisation:
+        return redirect('login')
+    event_edit = Event.objects.filter(organisation=request.user, id=id)[0]
+    if request.method == 'POST':
+        form = CreateEventsForm(request.POST, instance=event_edit)
+        if form.is_valid():
+            form.save()
+            return redirect('view_scheduled_events')
+    form = CreateEventsForm(instance=event_edit)
+    return render(request, 'create_events.html', {'create_events_form': form, 'event_edit': event_edit, 'submit_button_value': "Update"})

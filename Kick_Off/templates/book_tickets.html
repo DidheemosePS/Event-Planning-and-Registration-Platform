@@ -1,0 +1,47 @@
+{% extends 'index.html' %} {% load static %} 
+{% block title %} - Book Tickets {% endblock %} {% block main %}
+<main class="book_tickets_main">
+  <p class="order_summary_title">ORDER SUMMARY</p>
+  <div class="order_summary_details">
+    <div class="ticket_details">
+      <p>Didhee</p>
+      <p>NCI</p>
+      <p>Aug. 1, 2002</p>
+      <p>6:30 a.m.</p>
+    </div>
+    <div class="ticket_count">
+      <div>
+        <button class="ticket_minus">-</button>
+        <p>2</p>
+        <button class="ticket_add">+</button>
+      </div>
+      <p>Tickets</p>
+    </div>
+  </div>
+  <div class="amount_payable">
+    <p>Amount Payable</p>
+    <p>Rs. 247.96</p>
+  </div>
+  <div class="payment_details">
+    <p class="payment_details_title">Enter your Card details</p>
+    <form>
+      <label>Card number</label>
+      <input type="number" placeholder="Enter your card number" />
+      <input type="text" placeholder="Name on the card" />
+      <div class="payment_sub_form">
+        <label>Expiry</label>
+        <div>
+          <input type="number" placeholder="MM" />
+          <input type="number" placeholder="YY" />
+        </div>
+        <label>CVV</label>
+        <input type="number" placeholder="CVV" />
+      </div>
+      <input type="submit" value="MAKE PAYMENT" class="payment_button" />
+      <p class="warning_text">
+        This is used for a demo purpose, So don't give your correct card details
+      </p>
+    </form>
+  </div>
+</main>
+{% endblock %}

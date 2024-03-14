@@ -16,6 +16,7 @@
       rel="stylesheet"
       href="{% static 'css/view_scheduled_events.css' %}"
     />
+    <link rel="stylesheet" href="{% static 'css/book_tickets.css' %}" />
   </head>
   <body>
     {% include 'nav_bar.html' %} {% block main %}
@@ -28,7 +29,7 @@
       <div class="cards-list">
         {% for event in events %}
         <!-- To Show Events -->
-        <a class="card" href="{% url 'book_now' id=event.id %}">
+        <a class="card" href="{% url page_url id=event.id %}">
           <img src="{% static 'images/poster.jpg' %}" class="poster" />
           <p class="date_time">{{ event.event_date }}</p>
           <p class="org_name">{{ event.event_name }}</p>

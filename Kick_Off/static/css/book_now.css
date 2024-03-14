@@ -61,17 +61,35 @@
   position: absolute;
 }
 
-.book_now_main .tickets {
-  width: 100%;
-  height: 2rem;
-  border: none;
+.book_now_main .book_tickets {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 0.3rem;
+  text-decoration: none;
+  padding-block: 0.5rem;
   color: white;
   font-weight: bold;
+  font-size: smaller;
   margin-top: auto;
   background-color: rgb(223, 62, 62);
 }
 
-.book_now_main .tickets:hover {
-  cursor: pointer;
+.book_now_main .edit_delete_book_tickets {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.book_now_main .edit_delete_book_tickets a {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: smaller;
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  background-color: rgb(223, 62, 62);
 }

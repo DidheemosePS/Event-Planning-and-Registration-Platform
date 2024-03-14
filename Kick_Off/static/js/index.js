@@ -26,7 +26,7 @@ const bookmark_request = (bookmark_data) => {
         body: JSON.stringify(bookmark_data)
     }).then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error status: ${response.status}`);
         }
         return response.json();
     })
