@@ -18,8 +18,11 @@ urlpatterns = [
     path('saved_events/', views.saved_events, name='saved_events'),
     path('book_now/<str:id>/book_tickets/',
          views.book_tickets, name='book_tickets'),
+    path('book_now/<str:id>/book_tickets/make_payment/',
+         views.make_payment, name='make_payment'),
     path('view_scheduled_events/<str:id>/delete',
          views.view_scheduled_event_details_delete, name='view_scheduled_event_details_delete'),
     path('view_scheduled_events/<str:id>/edit',
-         views.view_scheduled_event_details_edit, name='view_scheduled_event_details_edit')
+         views.view_scheduled_event_details_edit, name='view_scheduled_event_details_edit'),
+    path('tickets_booked/', views.tickets_booked, name='tickets_booked'),
 ]

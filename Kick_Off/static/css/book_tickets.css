@@ -76,6 +76,13 @@
   font-size: large;
 }
 
+/* '\00a0' This is used to set a blank space */
+.amount_payable p:nth-child(2)::before {
+  content: "€\00a0";
+  font-weight: bold;
+  font-size: large;
+}
+
 .book_tickets_main .payment_details {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,4 @@
-{% extends 'index.html' %} {% load static %} 
-{% block title %} - Book Now {% endblock %} {% block main %}
+{% extends 'index.html' %} {% load static %} {% block main %}
 <main class="book_now_main">
   <img src="{% static 'images/DJ.jpg' %}" />
   <div>
@@ -97,11 +96,16 @@
 
   {% if request.user.is_organisation and request.user.id == organisation_id %}
   <div class="edit_delete_book_tickets">
-    <a href="{% url 'view_scheduled_event_details_edit' id=event_details.id %}">
+    <a
+      class="edit_button"
+      href="{% url 'view_scheduled_event_details_edit' id=event_details.id %}"
+    >
       <p>Edit this event</p>
     </a>
     <a
+      class="delete_button"
       href="{% url 'view_scheduled_event_details_delete' id=event_details.id %}"
+      onclick="return delete_event_alert()"
     >
       <p>Delete this event</p>
     </a>

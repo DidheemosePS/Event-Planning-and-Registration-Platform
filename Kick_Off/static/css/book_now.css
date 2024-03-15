@@ -81,7 +81,8 @@
   margin-top: auto;
 }
 
-.book_now_main .edit_delete_book_tickets a {
+.book_now_main .edit_delete_book_tickets .edit_button,
+.delete_button {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -91,5 +92,6 @@
   font-size: smaller;
   border-radius: 0.3rem;
   padding: 0.5rem;
+  border: none;
   background-color: rgb(223, 62, 62);
 }

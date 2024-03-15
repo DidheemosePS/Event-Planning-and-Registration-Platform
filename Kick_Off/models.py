@@ -27,8 +27,18 @@ class Event(models.Model):
 
 class Cart(models.Model):
     event = models.ForeignKey(
-        Event, on_delete=models.CASCADE, related_name="event")
+        Event, on_delete=models.CASCADE, related_name="cart_events")
     participant = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="cart")
+        CustomUser, on_delete=models.CASCADE, related_name="cart_participants")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+
+class Ticket(models.Model):
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="ticket_events")
+    participant = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="ticket_participants")
+    event_number_of_tickets = models.IntegerField()
+    event_ticket_price = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True)

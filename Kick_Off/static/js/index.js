@@ -46,7 +46,7 @@ const bookmark_request = (bookmark_data) => {
         });
 }
 
-function getCookie(name) {
+const getCookie = (name) => {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
@@ -59,4 +59,71 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+const ticket_count = (ticket_count_data) => {
+    const current_ticket_count = parseInt(document.getElementById('ticket_count').innerHTML);
+    if (ticket_count_data.status === "POSITIVE") {
+        const updated_ticket_count = current_ticket_count + 1
+        if (updated_ticket_count <= ticket_count_data.total_tickets) {
+            document.getElementById('ticket_count').innerHTML = `${updated_ticket_count}`
+            const ammount_payable = updated_ticket_count * ticket_count_data.ticket_price
+            document.getElementById('ticket_price').innerHTML = `${ammount_payable}`
+        }
+    } else {
+        const updated_ticket_count = current_ticket_count - 1
+        if (!updated_ticket_count <= 0) {
+            document.getElementById('ticket_count').innerHTML = `${updated_ticket_count}`
+            const ammount_payable = updated_ticket_count * ticket_count_data.ticket_price
+            document.getElementById('ticket_price').innerHTML = `${ammount_payable}`
+        }
+    }
+}
+
+const make_payment = (event_id) => {
+    if (confirm("Are you sure you want to purchase this ticket?")) {
+        const ticket_details = {
+            'event_number_of_tickets': parseInt(document.getElementById('ticket_count').innerHTML),
+            'event_ticket_price': parseInt(document.getElementById('ticket_price').innerHTML)
+
+        }
+        fetch(`/book_now/${event_id}/book_tickets/make_payment/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(ticket_details)
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error status: ${response.status}`);
+            }
+            return response.json();
+        })
+            .then(data => {
+                if (data.login_required) {
+                    window.location.href = '/login/'
+                }
+                else if (data.payment_status) {
+                    document.getElementById('payment_form').reset()
+                    window.location.href = '/tickets_booked/'
+                }
+                else {
+                    alert("Payment failed. Please try again")
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    } else {
+        alert("Payement cancelled.")
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('payment_form').reset()
+})
+
+const delete_event_alert = () => {
+    return confirm('Are you sure you want to delete')
 }
