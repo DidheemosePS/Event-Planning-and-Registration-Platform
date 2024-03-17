@@ -16,7 +16,7 @@ def index(request):
     today = now().date()
     events = Event.objects.filter(event_date__gte=today).annotate(
         booked_tickets=Sum('ticket_events__event_number_of_tickets')).values(
-        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'booked_tickets')
+        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'booked_tickets').order_by('-updated')
     return render(request, 'index.html', {'title': 'Kick Off', 'page_url': "book_now", 'events': events})
 
 
@@ -25,8 +25,9 @@ def search(request):
     today = now().date()
     search_value = request.GET.get('search_query')
     # Q is used to perform OR logical operation
-    search_result = Event.objects.filter(Q(event_date__gte=today) & Q(event_name__icontains=search_value) | Q(event_venue_name__icontains=search_value) | Q(organisation_name__icontains=search_value)).values(
-        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time')
+    search_result = Event.objects.filter(Q(event_date__gte=today) & Q(event_name__icontains=search_value) | Q(event_venue_name__icontains=search_value) | Q(organisation_name__icontains=search_value)).annotate(
+        booked_tickets=Sum('ticket_events__event_number_of_tickets')).values(
+        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'booked_tickets').order_by('-updated')
     return render(request, 'index.html', {'title': 'Search - Kick Off', 'page_url': "book_now", 'events': search_result})
 
 
@@ -100,8 +101,8 @@ def create_events(request):
 def view_scheduled_events(request):
     if not request.user.is_organisation:
         return redirect('login')
-    view_scheduled_events = Event.objects.filter(organisation=request.user).values(
-        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time').order_by('-updated')
+    view_scheduled_events = Event.objects.filter(organisation=request.user).annotate(booked_tickets=Sum(
+        'ticket_events__event_number_of_tickets')).values('id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'booked_tickets').order_by('-updated')
     return render(request, 'index.html', {'title': 'Scheduled Events - Kick Off', 'page_url': "view_scheduled_event_details", 'events': view_scheduled_events})
 
 
@@ -190,6 +191,8 @@ def make_payment(request, id):
         # json.loads(request.POST) used to get the data from the POST request, request.POST can be used only in the form submissions
         Ticket.objects.create(
             event=Event.objects.get(pk=id), participant=request.user, event_number_of_tickets=json.loads(request.body)['event_number_of_tickets'], event_ticket_price=json.loads(request.body)['event_ticket_price'])
+        Event.objects.filter(id=id).update(event_number_of_tickets=F(
+            'event_number_of_tickets')-json.loads(request.body)['event_number_of_tickets'])
         return JsonResponse({'payment_status': True})
     return JsonResponse({'status': 'Invalid request'})
 
@@ -200,8 +203,9 @@ def tickets_booked(request):
         return redirect('login')
     fetch_tickets_booked = Event.objects.filter(ticket_events__participant=request.user).annotate(
         number_of_tickets=F('ticket_events__event_number_of_tickets'),
-        ticket_price=F('ticket_events__event_ticket_price')).values(
-        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'number_of_tickets', 'ticket_price', 'created').order_by('created')
+        ticket_price=F('ticket_events__event_ticket_price'),
+        ticket_created=F('ticket_events__created')).order_by('-ticket_events__created').values(
+        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'number_of_tickets', 'ticket_price', 'ticket_created')
     if not fetch_tickets_booked:
         return HttpResponse('No tickets booked yet')
     return render(request, 'tickets_booked.html', {

@@ -121,7 +121,9 @@ const make_payment = (event_id) => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('payment_form').reset()
+    document.getElementById('payment_form') &&
+        document.getElementById('payment_form').reset()
+
 })
 
 const delete_event_alert = () => {

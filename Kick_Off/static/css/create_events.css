@@ -53,3 +53,12 @@
 .create_events .create_events_button:hover {
   cursor: pointer;
 }
+
+@media (min-width: 640px) {
+  .create_events {
+    width: 25rem;
+    padding-inline: 3rem;
+    margin: 1rem auto;
+    background-color: whitesmoke;
+  }
+}

@@ -1,81 +1,83 @@
 {% extends 'index.html' %} {% load static %} {% block main %}
 <main class="book_now_main">
   <img src="{% static 'images/DJ.jpg' %}" />
-  <div>
-    <p class="date_time">
-      {{ event_details.event_date }} - {{ event_details.event_time }}
-    </p>
+  <div class="book_now_left">
+    <div>
+      <p class="date_time">
+        {{ event_details.event_date }} - {{ event_details.event_time }}
+      </p>
 
-    <!-- Show the bookmark only to the participants -->
+      <!-- Show the bookmark only to the participants -->
 
-    {% if request.user.is_participant %}
-    <button
-      id="bookmark_icon"
-      class="bookmark_check"
-      onclick="bookmark_request({'id': '{{ event_details.id }}' })"
-    >
-      <!-- if condition to check whether the user is bookmark or not -->
-
-      {% if book_mark %}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-bookmark-check"
-        viewBox="0 0 16 16"
+      {% if request.user.is_participant %}
+      <button
+        id="bookmark_icon"
+        class="bookmark_check"
+        onclick="bookmark_request({'id': '{{ event_details.id }}' })"
       >
-        <path
-          fill-rule="evenodd"
-          d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"
-        />
-        <path
-          d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"
-        />
-      </svg>
-      {% else %}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-bookmark"
-        viewBox="0 0 16 16"
-      >
-        <path
-          d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"
-        />
-      </svg>
+        <!-- if condition to check whether the user is bookmark or not -->
+
+        {% if book_mark %}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-bookmark-check"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"
+          />
+          <path
+            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"
+          />
+        </svg>
+        {% else %}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-bookmark"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"
+          />
+        </svg>
+        {% endif %}
+      </button>
       {% endif %}
-    </button>
-    {% endif %}
-  </div>
-  <p class="description">{{ event_details.event_description }}</p>
-  <p class="tickets_count">
-    {{ event_details.event_number_of_tickets }} Tickets left
-  </p>
-  <a
-    href="{{ event_details.event_location_link }}"
-    target="_blank"
-    class="location_icon"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-geo-alt"
-      viewBox="0 0 16 16"
+    </div>
+    <p class="description">{{ event_details.event_description }}</p>
+    <p class="tickets_count">
+      {{ event_details.event_number_of_tickets }} Tickets left
+    </p>
+    <a
+      href="{{ event_details.event_location_link }}"
+      target="_blank"
+      class="location_icon"
     >
-      <path
-        d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"
-      />
-      <path
-        d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
-      />
-    </svg>
-    <p>Location</p>
-  </a>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-geo-alt"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"
+        />
+        <path
+          d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
+        />
+      </svg>
+      <p>Location</p>
+    </a>
+  </div>
   <video width="100%" height="100%" controls id="video" class="video">
     <source
       src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"

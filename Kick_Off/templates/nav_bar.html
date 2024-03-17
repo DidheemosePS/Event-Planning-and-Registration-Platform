@@ -16,6 +16,46 @@
         />
       </svg>
     </button>
+    <div class="nav_right_side">
+      {% if not request.user.is_organisation%}
+
+      <!-- This section is for Participants -->
+
+      <a href="{% url 'saved_events' %}" class="nav_right_side_buttons">
+        <p>Saved Events</p>
+      </a>
+      <a href="{% url 'tickets_booked' %}" class="nav_right_side_buttons">
+        <p>Tickets Booked</p>
+      </a>
+      <a href="{% url 'signup' %}" class="nav_right_side_buttons">
+        <p>Become a event organiser</p>
+      </a>
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'logout' %}" class="nav_right_side_buttons">
+        <p>Logout</p>
+      </a>
+      {% endif %} {% endif %} {% if request.user.is_organisation%}
+
+      <!-- This section is for organisations -->
+
+      <a href="{% url 'create_events' %}" class="nav_right_side_buttons">
+        <p>Create an event</p>
+      </a>
+      <a
+        href="{% url 'view_scheduled_events' %}"
+        class="nav_right_side_buttons"
+      >
+        <p>View scheduled events</p>
+      </a>
+      <a href="{% url 'logout' %}" class="nav_right_side_buttons">
+        <p>Logout</p>
+      </a>
+      {% endif %} {% if not request.user.is_authenticated %}
+      <a href="{% url 'login' %}" class="nav_right_side_buttons">
+        <p>Login / Register</p>
+      </a>
+      {% endif %}
+    </div>
   </div>
   <div id="slider" class="slider">
     {% if not request.user.is_organisation%}

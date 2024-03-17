@@ -41,6 +41,10 @@
   cursor: pointer;
 }
 
+.nav .nav_right_side {
+  display: none;
+}
+
 .slider {
   width: 100%;
   height: calc(100dvh - 4rem);
@@ -68,4 +72,56 @@
 
 .slider .slider_buttons svg:last-child {
   margin-left: auto;
+}
+
+@media (min-width: 640px) {
+  .nav,
+  .slider .slider_buttons {
+    padding-inline: 5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .nav,
+  .slider .slider_buttons {
+    padding-inline: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav,
+  .slider .slider_buttons {
+    padding-inline: 7rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .nav {
+    padding-inline: 10rem;
+  }
+
+  .nav #toggle_slider {
+    display: none;
+  }
+
+  .nav .nav_right_side {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav_right_side .nav_right_side_buttons {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    font-size: smaller;
+    font-weight: 600;
+  }
+}
+
+@media (min-width: 1536px) {
+  .nav {
+    padding-inline: 11rem;
+  }
 }
