@@ -7,32 +7,41 @@ from . forms import SignupForm, LoginForm, CreateEventsForm
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, F
+from django.db.models import Q, F, Sum
+from django.utils.timezone import now
 
 
 def index(request):
-    events = Event.objects.all().values(
-        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time')
+    # event_date___gte used to find the events available in future, To avoid the expried events and __gte means '>='
+    today = now().date()
+    events = Event.objects.filter(event_date__gte=today).annotate(
+        booked_tickets=Sum('ticket_events__event_number_of_tickets')).values(
+        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'booked_tickets')
     return render(request, 'index.html', {'title': 'Kick Off', 'page_url': "book_now", 'events': events})
 
 
 def search(request):
+    # event_date___gte used to find the events available in future, To avoid the expried events and __gte means '>='
+    today = now().date()
     search_value = request.GET.get('search_query')
     # Q is used to perform OR logical operation
-    search_result = Event.objects.filter(Q(event_name__icontains=search_value) | Q(
-        event_venue_name__icontains=search_value) | Q(organisation_name__icontains=search_value)).values(
+    search_result = Event.objects.filter(Q(event_date__gte=today) & Q(event_name__icontains=search_value) | Q(event_venue_name__icontains=search_value) | Q(organisation_name__icontains=search_value)).values(
         'id', 'event_name', 'event_venue_name', 'event_date', 'event_time')
     return render(request, 'index.html', {'title': 'Search - Kick Off', 'page_url': "book_now", 'events': search_result})
 
 
 @login_required(login_url="login")
 def book_now(request, id):
-    event_details = Event.objects.filter(id=id)[0]
+    # event_date___gte used to find the events available in future, To avoid the expried events and __gte means '>='
+    today = now().date()
+    event_details = Event.objects.filter(event_date__gte=today, id=id)
+    if not event_details:
+        return HttpResponse("This event is not available")
     book_mark = Cart.objects.filter(
         participant=request.user, event=Event.objects.get(pk=id))
     if not book_mark:
-        return render(request, 'book_now.html', {'event_details': event_details})
-    return render(request, 'book_now.html', {'title': 'Book Now - Kick Off', 'event_details': event_details, 'book_mark': True})
+        return render(request, 'book_now.html', {'event_details': event_details[0]})
+    return render(request, 'book_now.html', {'title': 'Book Now - Kick Off', 'event_details': event_details[0], 'book_mark': True})
 
 
 def signup(request):
@@ -139,13 +148,16 @@ def saved_events(request):
 def book_tickets(request, id):
     if not request.user.is_participant:
         return redirect('login')
-    ticket_count = Event.objects.filter(
-        id=id).values_list('event_number_of_tickets', flat=True)[0]
+    # event_date___gte used to find the events available in future, To avoid the expried events and __gte means '>='
+    today = now().date()
+    ticket_details = Event.objects.filter(event_date__gte=today, id=id).values(
+        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'event_number_of_tickets', 'event_ticket_price')
+    if not ticket_details:
+        return HttpResponse("This event is not available")
+    ticket_count = ticket_details[0]['event_number_of_tickets']
     if ticket_count == 0:
         return HttpResponse("No tickets left")
-    ticket_details = Event.objects.filter(id=id).values(
-        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'event_number_of_tickets', 'event_ticket_price')[0]
-    return render(request, 'book_tickets.html', {'title': 'Book Tickets - Kick Off', 'ticket_details': ticket_details})
+    return render(request, 'book_tickets.html', {'title': 'Book Tickets - Kick Off', 'ticket_details': ticket_details[0]})
 
 
 @login_required(login_url="login")
@@ -189,9 +201,9 @@ def tickets_booked(request):
     fetch_tickets_booked = Event.objects.filter(ticket_events__participant=request.user).annotate(
         number_of_tickets=F('ticket_events__event_number_of_tickets'),
         ticket_price=F('ticket_events__event_ticket_price')).values(
-        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'number_of_tickets', 'ticket_price', 'created').order_by('-created')
+        'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'number_of_tickets', 'ticket_price', 'created').order_by('created')
     if not fetch_tickets_booked:
-        return HttpResponse('No saved events')
+        return HttpResponse('No tickets booked yet')
     return render(request, 'tickets_booked.html', {
         'title': 'Tickets Booked - Kick Off', 'ticket_details': fetch_tickets_booked, 'text': "Amount Paid"
     })

@@ -68,3 +68,18 @@ body {
   font-weight: 500;
   padding-inline: 0.5rem;
 }
+
+.card .interest {
+  display: flex;
+  align-items: center;
+  padding-inline: 0.5rem;
+}
+
+.card .interest svg {
+  color: gold;
+}
+
+.card .interest p {
+  font-size: smaller;
+  color: grey;
+}
