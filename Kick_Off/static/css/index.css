@@ -45,9 +45,13 @@ body {
   border-radius: 0.3rem;
   padding-bottom: 0.5rem;
   overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  position: relative;
+}
+
+.card a {
   text-decoration: none;
   color: black;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
 .card .poster {
@@ -82,6 +86,15 @@ body {
 .card .interest p {
   font-size: smaller;
   color: grey;
+}
+
+.card .delete_saved_event_button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 9;
+  color: red;
+  border: none;
 }
 
 @media (min-width: 640px) {

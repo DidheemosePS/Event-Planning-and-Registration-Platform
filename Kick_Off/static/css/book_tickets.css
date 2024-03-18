@@ -154,3 +154,12 @@
   font-weight: 600;
   color: gray;
 }
+
+@media (min-width: 640px) {
+  .book_tickets_main {
+    width: 25rem;
+    padding-inline: 3rem;
+    margin: 1rem auto;
+    background-color: whitesmoke;
+  }
+}

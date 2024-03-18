@@ -15,6 +15,8 @@ urlpatterns = [
          name='view_scheduled_event_details'),
     path('save_this_event/',
          views.save_this_event, name='save_this_event'),
+    path('delete_saved_event/<str:id>/', views.delete_saved_event,
+         name='delete_saved_event'),
     path('saved_events/', views.saved_events, name='saved_events'),
     path('book_now/<str:id>/book_tickets/',
          views.book_tickets, name='book_tickets'),

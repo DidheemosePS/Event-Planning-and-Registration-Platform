@@ -86,71 +86,41 @@
 }
 
 @media (min-width: 640px) {
-  .booked_tickets_main .booked_order_summary_title {
-    padding-inline: 3rem;
-  }
-
-  .booked_tickets_main .booked_order_summary_details {
-    padding-inline: 3rem;
-  }
-
+  .booked_tickets_main .booked_order_summary_title,
+  .booked_tickets_main .booked_order_summary_details,
   .booked_tickets_main .amount_paid {
-    padding-inline: 3rem;
+    padding-inline: 5rem;
   }
 }
 
 @media (min-width: 768px) {
-  .booked_tickets_main .booked_order_summary_title {
-    padding-inline: 4rem;
-  }
-
-  .booked_tickets_main .booked_order_summary_details {
-    padding-inline: 4rem;
-  }
-
+  .booked_tickets_main .booked_order_summary_title,
+  .booked_tickets_main .booked_order_summary_details,
   .booked_tickets_main .amount_paid {
-    padding-inline: 4rem;
+    padding-inline: 6rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .booked_tickets_main .booked_order_summary_title {
-    padding-inline: 5rem;
-  }
-
-  .booked_tickets_main .booked_order_summary_details {
-    padding-inline: 5rem;
-  }
-
+  .booked_tickets_main .booked_order_summary_title,
+  .booked_tickets_main .booked_order_summary_details,
   .booked_tickets_main .amount_paid {
-    padding-inline: 5rem;
+    padding-inline: 7rem;
   }
 }
 
 @media (min-width: 1280px) {
-  .booked_tickets_main .booked_order_summary_title {
-    padding-inline: 6rem;
-  }
-
-  .booked_tickets_main .booked_order_summary_details {
-    padding-inline: 6rem;
-  }
-
+  .booked_tickets_main .booked_order_summary_title,
+  .booked_tickets_main .booked_order_summary_details,
   .booked_tickets_main .amount_paid {
-    padding-inline: 6rem;
+    padding-inline: 10rem;
   }
 }
 
 @media (min-width: 1536px) {
-  .booked_tickets_main .booked_order_summary_title {
-    padding-inline: 7rem;
-  }
-
-  .booked_tickets_main .booked_order_summary_details {
-    padding-inline: 7rem;
-  }
-
+  .booked_tickets_main .booked_order_summary_title,
+  .booked_tickets_main .booked_order_summary_details,
   .booked_tickets_main .amount_paid {
-    padding-inline: 7rem;
+    padding-inline: 11rem;
   }
 }

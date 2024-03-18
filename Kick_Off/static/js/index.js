@@ -129,3 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const delete_event_alert = () => {
     return confirm('Are you sure you want to delete')
 }
+
+const saved_delete_button = () => {
+    alert("Are you sure you want to save")
+}

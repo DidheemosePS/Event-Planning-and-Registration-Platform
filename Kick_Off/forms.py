@@ -52,6 +52,10 @@ class CreateEventsForm(forms.ModelForm):
         label="Ticket Price", required=True)
     event_location_link = forms.URLField(
         label="Location Link", max_length=200, required=True, widget=forms.DateInput(attrs={'type': "url"}))
+    event_image = forms.FileField(label="Image", required=True, widget=forms.FileInput(
+        attrs={'type': "file", 'accept': "image/png, image/jpeg"}))
+    event_video = forms.FileField(label="Video", required=True, widget=forms.FileInput(
+        attrs={'type': "file", 'accept': "video/mp4"}))
 
     class Meta:
         model = Event

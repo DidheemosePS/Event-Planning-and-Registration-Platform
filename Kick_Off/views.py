@@ -115,6 +115,7 @@ def view_scheduled_event_details(request, id):
     return render(request, 'book_now.html', {'title': 'Scheduled Event Details - Kick Off', 'organisation_id': request.user.id, 'event_details': view_scheduled_event_details})
 
 
+@login_required(login_url="login")
 def save_this_event(request):
     if not request.user.is_participant:
         return JsonResponse({'login_required': True})
@@ -131,6 +132,15 @@ def save_this_event(request):
                 participant=request.user, event=Event.objects.get(pk=id)).delete()
             return JsonResponse({'bookmarked': False})
     return JsonResponse({'status': 'Invalid request'})
+
+
+@login_required(login_url="login")
+def delete_saved_event(request, id):
+    if not request.user.is_participant:
+        return redirect('login')
+    Cart.objects.filter(
+        participant=request.user, event=Event.objects.get(pk=id)).delete()
+    return redirect('saved_events')
 
 
 @login_required(login_url="login")
