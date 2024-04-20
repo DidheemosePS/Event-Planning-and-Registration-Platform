@@ -14,6 +14,7 @@ from django.db.models import Q, F, Sum
 from django.utils.timezone import now
 from django.conf import settings
 from django_email.email_utils import send_html_email
+import random
 
 def index(request):
     # event_date___gte used to find the events available in future, To avoid the expried events and __gte means '>='
@@ -21,7 +22,9 @@ def index(request):
     events = Event.objects.filter(event_date__gte=today).annotate(
         booked_tickets=Sum('ticket_events__event_number_of_tickets')).values(
         'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'booked_tickets', 'event_image_url', 'event_video_url').order_by('-updated')
-    return render(request, 'index.html', {'title': 'Kick Off', 'page_url': "book_now", 'events': events})
+    # generate random events from queryset to display in the carousel
+    random_events = random.sample(list(events), min(5, len(events)))
+    return render(request, 'index.html', {'title': 'Kick Off', 'page_url': "book_now", 'events': events, 'random_events': random_events})
 
 
 def search(request):
@@ -32,7 +35,11 @@ def search(request):
     search_result = Event.objects.filter(Q(event_date__gte=today) & Q(event_name__icontains=search_value) | Q(event_venue_name__icontains=search_value) | Q(organisation_name__icontains=search_value)).annotate(
         booked_tickets=Sum('ticket_events__event_number_of_tickets')).values(
         'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'booked_tickets').order_by('-updated')
-    return render(request, 'index.html', {'title': 'Search - Kick Off', 'page_url': "book_now", 'events': search_result})
+    events = Event.objects.filter(event_date__gte=today).values(
+        'id', 'event_image_url').order_by('-updated')
+    # generate random events from queryset to display in the carousel
+    random_events = random.sample(list(events), min(5, len(events)))
+    return render(request, 'index.html', {'title': 'Search - Kick Off', 'page_url': "book_now", 'events': search_result, 'random_events': random_events})
 
 
 @login_required(login_url="login")
@@ -142,9 +149,14 @@ def create_events(request):
 def view_scheduled_events(request):
     if not request.user.is_organisation:
         return redirect('login')
+    today = now().date()
     view_scheduled_events = Event.objects.filter(organisation=request.user).annotate(booked_tickets=Sum(
         'ticket_events__event_number_of_tickets')).values('id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'booked_tickets', 'event_image_url', 'event_video_url').order_by('-updated')
-    return render(request, 'index.html', {'title': 'Scheduled Events - Kick Off', 'page_url': "view_scheduled_event_details", 'events': view_scheduled_events})
+    events = Event.objects.filter(event_date__gte=today).values(
+        'id', 'event_image_url').order_by('-updated')
+    # generate random events from queryset to display in the carousel
+    random_events = random.sample(list(events), min(5, len(events)))
+    return render(request, 'index.html', {'title': 'Scheduled Events - Kick Off', 'page_url': "view_scheduled_event_details", 'events': view_scheduled_events, 'random_events': random_events})
 
 
 @login_required(login_url="login")
@@ -179,12 +191,17 @@ def save_this_event(request):
 def saved_events(request):
     if not request.user.is_participant:
         return redirect('login')
+    today = now().date()
     fetch_saved_events = Event.objects.filter(
         cart_events__participant=request.user).values(
         'id', 'event_name', 'event_venue_name', 'event_date', 'event_time', 'event_image_url', 'event_video_url').order_by('-updated')
     if not fetch_saved_events:
         return HttpResponse('No saved events')
-    return render(request, 'index.html', {'title': 'Saved Events - Kick Off', 'page_url': "book_now", 'events': fetch_saved_events})
+    events = Event.objects.filter(event_date__gte=today).values(
+        'id', 'event_image_url').order_by('-updated')
+    # generate random events from queryset to display in the carousel
+    random_events = random.sample(list(events), min(5, len(events)))
+    return render(request, 'index.html', {'title': 'Saved Events - Kick Off', 'page_url': "book_now", 'events': fetch_saved_events, 'random_events': random_events})
 
 
 @login_required(login_url="login")
@@ -241,10 +258,10 @@ def view_scheduled_event_details_edit(request, id):
             if 'event_video' in form.changed_data and form.cleaned_data['event_video']:
                 video_key = urlparse(
                     event_edit.event_video_url).path.lstrip('/')
-                if image_key is not None:
+                if video_key is not None:
                     delete_file('x23176245-s3-bucket', video_key)
                 event_video = request.FILES['event_video']
-                video_key = f"kick_off/images/{event_video}"
+                video_key = f"kick_off/videos/{event_video}"
                 content_type = mimetypes.guess_type(event_video.name)[0]
                 event_video_response = upload_file(
                     event_video, 'x23176245-s3-bucket', video_key, content_type)

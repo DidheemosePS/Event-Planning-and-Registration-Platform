@@ -19,21 +19,11 @@
     {% include 'nav_bar.html' %} {% block main %}
     <main id="main" class="main">
       <div class="carousel" id="carousel">
-        {% if events|length > 5 %} 
-        <!--Display the image if there is more than 5 image-->
-           {% for event in events|random|slice:":5" %}
-           <a href="{% url page_url id=event.id %}" >
-            <img src="{{ event.event_image_url }}" />
-           </a>
-           {% endfor %}
-        {% else %}
-        <!--Display the image if there is only 5 image-->
-          {% for event in events %}
+          {% for event in random_events %}
             <a href="{% url page_url id=event.id %}" >
               <img src="{{ event.event_image_url }}" />
             </a>
           {% endfor %}
-        {% endif %}
       </div>
       {% include 'search_bar.html'%}
       <div class="cards-list">
