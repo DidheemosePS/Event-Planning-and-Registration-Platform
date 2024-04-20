@@ -38,7 +38,7 @@
     <p class="payment_details_title">Enter your Card details</p>
     <!-- 'return false is used to prevent the page reload' -->
     <form
-      onsubmit="make_payment('{{ticket_details.id}}'); return false"
+      onsubmit="make_payment(event,'{{ticket_details.id}}')"
       id="payment_form"
     >
       <label>Card number</label>

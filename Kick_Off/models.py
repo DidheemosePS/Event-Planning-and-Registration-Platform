@@ -18,6 +18,8 @@ class Event(models.Model):
     event_number_of_tickets = models.IntegerField()
     event_ticket_price = models.IntegerField()
     event_location_link = models.URLField(max_length=200)
+    event_image_url = models.URLField(max_length=200)
+    event_video_url = models.URLField(max_length=200)
     organisation_name = models.CharField(max_length=100)
     organisation = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='events_created')

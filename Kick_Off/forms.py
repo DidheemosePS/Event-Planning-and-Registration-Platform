@@ -61,3 +61,9 @@ class CreateEventsForm(forms.ModelForm):
         model = Event
         fields = ['event_name', 'event_venue_name', 'event_description',
                   'event_date', 'event_time', 'event_number_of_tickets', 'event_ticket_price', 'event_location_link']
+
+    def __init__(self, *args, **kwargs):
+        super(CreateEventsForm, self).__init__(*args, **kwargs)
+        if 'instance' in kwargs:
+            self.fields['event_image'].required = False
+            self.fields['event_video'].required = False

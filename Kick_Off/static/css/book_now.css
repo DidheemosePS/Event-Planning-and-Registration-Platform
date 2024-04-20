@@ -149,6 +149,10 @@
   .book_now_main img {
     height: 16rem;
   }
+
+  .book_now_main .video {
+    height: 30rem;
+  }
 }
 
 @media (min-width: 1280px) {

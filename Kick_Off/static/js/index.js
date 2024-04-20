@@ -80,7 +80,8 @@ const ticket_count = (ticket_count_data) => {
     }
 }
 
-const make_payment = (event_id) => {
+const make_payment = (event, event_id) => {
+    event.preventDefault()
     if (confirm("Are you sure you want to purchase this ticket?")) {
         const ticket_details = {
             'event_number_of_tickets': parseInt(document.getElementById('ticket_count').innerHTML),
@@ -121,9 +122,47 @@ const make_payment = (event_id) => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    if (document.getElementById('carousel')) {
+        carousel_items = document.getElementById('carousel').querySelectorAll("*")
+        let count = 0
+        let direction = 1
+        let interval_id
+        const start_carousel = () => {
+            interval_id = setInterval(() => {
+                if (count >= 0 && count < carousel_items.length) {
+                    carousel_items[count].scrollIntoView({ behavior: "smooth" })
+                    count += direction
+                } else {
+                    direction = count < 0 ? 1 : -1
+                    count += direction
+                }
+            }, 4000)
+        }
+
+        start_carousel()
+
+        document.getElementById('carousel').addEventListener('mouseenter', () => {
+            clearInterval(interval_id)
+        })
+
+        document.getElementById('carousel').addEventListener('mouseleave', () => {
+            start_carousel()
+        })
+    }
+
     document.getElementById('payment_form') &&
         document.getElementById('payment_form').reset()
 
+    if (document.getElementById('ticket_ids')) {
+        const ticket_ids = JSON.parse(document.getElementById('ticket_ids').textContent);
+        ticket_ids.forEach(ticket_id => {
+            const checkboxes = document.querySelectorAll(`#rating_checkbox_${ticket_id} input[type = "checkbox"]`);
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.checked = false
+            });
+        })
+    }
 })
 
 const delete_event_alert = () => {
@@ -132,4 +171,56 @@ const delete_event_alert = () => {
 
 const saved_delete_button = () => {
     alert("Are you sure you want to save")
+}
+
+const ticket_ids = JSON.parse(document.getElementById('ticket_ids').textContent);
+ticket_ids.forEach(ticket_id => {
+    const checkboxes = document.querySelectorAll(`#rating_checkbox_${ticket_id} input[type = "checkbox"]`);
+    checkboxes.forEach((checkbox, index) => {
+        checkbox.addEventListener('click', function () {
+            if (checkbox.checked) {
+                for (let i = 0; i <= index; i++) {
+                    checkboxes[i].checked = true;
+                    checkboxes[i].parentElement.style.color = "gold"
+                }
+            } else {
+                checkboxes[index].checked = true;
+                for (let i = index + 1; i <= checkboxes.length - 1; i++) {
+                    checkboxes[i].checked = false;
+                    checkboxes[i].parentElement.style.color = "gray"
+                }
+            }
+        });
+    });
+})
+
+const submit_rating_rating_checkbox = (event, event_id, ticket_id) => {
+    event.preventDefault();
+    const checkboxes = document.querySelectorAll(`#rating_checkbox_${ticket_id} input[type="checkbox"]`);
+    const rating_textarea = document.getElementById(`rating_textarea_${ticket_id}`).value
+    const checked_count = Array.from(checkboxes).filter(checkbox => checkbox.checked).length
+    const event_rating = {
+        'review': rating_textarea,
+        'star': checked_count,
+        'ticket_id': ticket_id,
+        'event_id': event_id
+    }
+    fetch("/event_rating/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(event_rating)
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error status: ${response.status}`);
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        window.location.href = '/tickets_booked/'
+    }).catch(error => {
+        console.error('Error:', error);
+    });
 }

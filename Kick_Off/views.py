@@ -1,5 +1,8 @@
 import json
+import mimetypes
+from urllib.parse import urlparse
 from django.http import HttpResponse, JsonResponse
+from .s3 import delete_file, upload_file
 from .models import Event, Cart, Ticket
 from django.shortcuts import render, redirect
 from django.shortcuts import redirect, render
@@ -41,7 +44,7 @@ def book_now(request, id):
     book_mark = Cart.objects.filter(
         participant=request.user, event=Event.objects.get(pk=id))
     if not book_mark:
-        return render(request, 'book_now.html', {'event_details': event_details[0]})
+        return render(request, 'book_now.html', {'title': 'Book Now - Kick Off', 'event_details': event_details[0], 'book_mark': False})
     return render(request, 'book_now.html', {'title': 'Book Now - Kick Off', 'event_details': event_details[0], 'book_mark': True})
 
 
@@ -86,11 +89,27 @@ def create_events(request):
     if not request.user.is_organisation:
         return redirect('login')
     if request.method == 'POST':
-        form = CreateEventsForm(request.POST)
+        form = CreateEventsForm(request.POST, request.FILES)
         if form.is_valid():
+            event_image = request.FILES['event_image']
+            image_key = f"kick_off/images/{event_image}"
+            content_type = mimetypes.guess_type(event_image.name)[0]
+            event_video = request.FILES['event_video']
+            video_key = f"kick_off/videos/{event_video}"
+            content_type = mimetypes.guess_type(event_video.name)[0]
+            event_image_response = upload_file(
+                event_image, 'x23176245-s3-bucket', image_key, content_type)
+            event_video_response = upload_file(
+                event_video, 'x23176245-s3-bucket', video_key, content_type)
             create_event = form.save(commit=False)
             create_event.organisation_name = request.user
             create_event.organisation = request.user
+            if event_image_response is not False and event_video_response is not False:
+                create_event.event_image_url = event_image_response
+                create_event.event_video_url = event_video_response
+            else:
+                create_event.event_image_url = ''
+                create_event.event_video_url = ''
             create_event.save()
             return redirect('view_scheduled_events')
     form = CreateEventsForm()
@@ -135,15 +154,6 @@ def save_this_event(request):
 
 
 @login_required(login_url="login")
-def delete_saved_event(request, id):
-    if not request.user.is_participant:
-        return redirect('login')
-    Cart.objects.filter(
-        participant=request.user, event=Event.objects.get(pk=id)).delete()
-    return redirect('saved_events')
-
-
-@login_required(login_url="login")
 def saved_events(request):
     if not request.user.is_participant:
         return redirect('login')
@@ -185,8 +195,33 @@ def view_scheduled_event_details_edit(request, id):
         return redirect('login')
     event_edit = Event.objects.filter(organisation=request.user, id=id)[0]
     if request.method == 'POST':
-        form = CreateEventsForm(request.POST, instance=event_edit)
+        form = CreateEventsForm(
+            request.POST, request.FILES, instance=event_edit)
         if form.is_valid():
+            if 'event_image' in form.changed_data and form.cleaned_data['event_image']:
+                image_key = urlparse(
+                    event_edit.event_image_url).path.lstrip('/')
+                if image_key not in None:
+                    delete_file('x23176245-s3-bucket', image_key)
+                event_image = request.FILES['event_image']
+                image_key = f"kick_off/images/{event_image}"
+                content_type = mimetypes.guess_type(event_image.name)[0]
+                event_image_response = upload_file(
+                    event_image, 'x23176245-s3-bucket', image_key, content_type)
+                if event_image_response is not False:
+                    event_edit.event_image_url = event_image_response
+            if 'event_video' in form.changed_data and form.cleaned_data['event_video']:
+                video_key = urlparse(
+                    event_edit.event_video_url).path.lstrip('/')
+                if image_key not in None:
+                    delete_file('x23176245-s3-bucket', video_key)
+                event_video = request.FILES['event_video']
+                video_key = f"kick_off/images/{event_video}"
+                content_type = mimetypes.guess_type(event_video.name)[0]
+                event_video_response = upload_file(
+                    event_video, 'x23176245-s3-bucket', video_key, content_type)
+                if event_video_response is not False:
+                    event_edit.event_video_url = event_video_response
             form.save()
             return redirect('view_scheduled_events')
     form = CreateEventsForm(instance=event_edit)

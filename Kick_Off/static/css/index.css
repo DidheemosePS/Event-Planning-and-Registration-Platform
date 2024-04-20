@@ -25,6 +25,12 @@ body {
   display: flex;
   border-radius: 0.3rem;
   overflow-x: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
 }
 
 .carousel img {
