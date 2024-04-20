@@ -34,8 +34,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cd491d19feba4bddbc09cc5dbd7efd94.vfs.cloud9.eu-west-1.amazonaws.com']
 
+CSRF_TRUSTED_ORIGINS = ['https://cd491d19feba4bddbc09cc5dbd7efd94.vfs.cloud9.eu-west-1.amazonaws.com']
 
 # Application definition
 

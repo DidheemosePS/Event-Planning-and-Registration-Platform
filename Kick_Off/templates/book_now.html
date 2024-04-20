@@ -1,6 +1,6 @@
 {% extends 'index.html' %} {% load static %} {% block main %}
 <main class="book_now_main">
-  <img src="{% static 'images/DJ.jpg' %}" />
+  <img src="{{ event_details.event_image_url }}" />
   <div class="book_now_left">
     <div>
       <p class="date_time">
@@ -80,8 +80,7 @@
   </div>
   <video width="100%" height="100%" controls id="video" class="video">
     <source
-      src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-      type="video/mp4"
+      src="{{ event_details.event_video_url }}"
     />
     Your browser does not support the video tag.
   </video>

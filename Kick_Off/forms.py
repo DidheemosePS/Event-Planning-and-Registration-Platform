@@ -7,6 +7,8 @@ from django.forms.widgets import PasswordInput, TextInput
 
 
 class SignupForm(UserCreationForm):
+    email = forms.CharField(max_length=75, required=True)
+    
     ACCOUNT_TYPE = [
         ('Participant', 'Participant'),
         ('Organisation', 'Organisation'),
