@@ -9,5 +9,5 @@ phases:
     commands:
       - python --version
 artifacts:
-  files:
+    files:
     - '**/*'
