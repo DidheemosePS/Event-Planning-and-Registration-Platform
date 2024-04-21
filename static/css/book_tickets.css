@@ -1,0 +1,165 @@
+.book_tickets_main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-block: 1rem;
+}
+
+.book_tickets_main .order_summary_title {
+  color: gray;
+  padding-inline: 1rem;
+}
+
+.book_tickets_main .order_summary_details {
+  display: flex;
+  padding-inline: 1rem;
+}
+
+.order_summary_details .ticket_details {
+  font-size: small;
+  color: gray;
+}
+
+.order_summary_details .ticket_details p:first-child {
+  font-size: medium;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 0.2rem;
+}
+
+.order_summary_details .ticket_count {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  margin-left: auto;
+}
+
+.ticket_count div {
+  display: flex;
+  gap: 1rem;
+}
+
+.ticket_count div p {
+  font-size: medium;
+  font-weight: 600;
+  color: black;
+}
+
+.ticket_count div .ticket_minus,
+.ticket_add {
+  border: none;
+  background-color: transparent;
+}
+
+.ticket_count p {
+  font-size: smaller;
+  color: gray;
+}
+
+.book_tickets_main .amount_payable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  background-color: whitesmoke;
+}
+
+.amount_payable p:first-child {
+  font-size: smaller;
+  color: gray;
+}
+
+.amount_payable p:nth-child(2) {
+  font-weight: bold;
+  font-size: large;
+}
+
+/* '\00a0' This is used to set a blank space */
+.amount_payable p:nth-child(2)::before {
+  content: "€\00a0";
+  font-weight: bold;
+  font-size: large;
+}
+
+.book_tickets_main .payment_details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-inline: 1rem;
+}
+
+.payment_details form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  border-radius: 0.3rem;
+  background-color: whitesmoke;
+}
+
+.payment_details form label {
+  font-size: small;
+  font-weight: 600;
+}
+
+.payment_details form input {
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  border: none;
+  border-radius: 0.3rem;
+}
+
+.payment_details form input::placeholder {
+  font-size: x-small;
+  font-weight: 600;
+}
+
+.payment_details .payment_details_title {
+  font-weight: 600;
+}
+
+.payment_details .payment_sub_form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, max-content);
+  row-gap: 0.3rem;
+  column-gap: 1rem;
+}
+
+.payment_details .payment_sub_form div {
+  display: flex;
+  gap: 0.3rem;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.payment_details .payment_button {
+  border-radius: 0.3rem;
+  padding-block: 0.5rem;
+  color: white;
+  font-weight: bold;
+  font-size: small;
+  border: none;
+  margin-block: 0.3rem;
+  background-color: rgb(223, 62, 62);
+}
+
+.payment_details .warning_text {
+  font-size: x-small;
+  font-weight: 600;
+  color: gray;
+}
+
+@media (min-width: 640px) {
+  .book_tickets_main {
+    width: 25rem;
+    padding-inline: 3rem;
+    margin: 1rem auto;
+    background-color: whitesmoke;
+  }
+}
